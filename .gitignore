@@ -138,6 +138,9 @@ server/
 !.yarn/sdks
 !.yarn/versions
 
+# GSD planning artifacts
+.planning/
+
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

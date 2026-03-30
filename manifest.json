@@ -22,80 +22,289 @@
       "command": "node",
       "args": ["${__dirname}/server/index.js"],
       "env": {
-        "EMAIL_ADDRESS": "${user_config.email_address}",
-        "EMAIL_PASSWORD": "${user_config.email_password}",
-        "IMAP_HOST": "${user_config.imap_host}",
-        "SMTP_HOST": "${user_config.smtp_host}",
-        "IMAP_SECURITY": "${user_config.imap_security}",
-        "SMTP_SECURITY": "${user_config.smtp_security}",
-        "IMAP_PORT": "${user_config.imap_port}",
-        "SMTP_PORT": "${user_config.smtp_port}",
-        "EMAIL_USERNAME": "${user_config.email_username}",
-        "SSL_VERIFY": "${user_config.ssl_verify}"
+        "ACCOUNT_1_LABEL": "${user_config.account_1_label}",
+        "ACCOUNT_1_EMAIL_ADDRESS": "${user_config.account_1_email_address}",
+        "ACCOUNT_1_EMAIL_PASSWORD": "${user_config.account_1_email_password}",
+        "ACCOUNT_1_IMAP_HOST": "${user_config.account_1_imap_host}",
+        "ACCOUNT_1_SMTP_HOST": "${user_config.account_1_smtp_host}",
+        "ACCOUNT_1_IMAP_SECURITY": "${user_config.account_1_imap_security}",
+        "ACCOUNT_1_SMTP_SECURITY": "${user_config.account_1_smtp_security}",
+        "ACCOUNT_1_IMAP_PORT": "${user_config.account_1_imap_port}",
+        "ACCOUNT_1_SMTP_PORT": "${user_config.account_1_smtp_port}",
+        "ACCOUNT_1_EMAIL_USERNAME": "${user_config.account_1_email_username}",
+        "ACCOUNT_1_SSL_VERIFY": "${user_config.account_1_ssl_verify}",
+        "ACCOUNT_1_SENT_FOLDER": "${user_config.account_1_sent_folder}",
+        "ACCOUNT_2_LABEL": "${user_config.account_2_label}",
+        "ACCOUNT_2_EMAIL_ADDRESS": "${user_config.account_2_email_address}",
+        "ACCOUNT_2_EMAIL_PASSWORD": "${user_config.account_2_email_password}",
+        "ACCOUNT_2_IMAP_HOST": "${user_config.account_2_imap_host}",
+        "ACCOUNT_2_SMTP_HOST": "${user_config.account_2_smtp_host}",
+        "ACCOUNT_2_IMAP_SECURITY": "${user_config.account_2_imap_security}",
+        "ACCOUNT_2_SMTP_SECURITY": "${user_config.account_2_smtp_security}",
+        "ACCOUNT_2_IMAP_PORT": "${user_config.account_2_imap_port}",
+        "ACCOUNT_2_SMTP_PORT": "${user_config.account_2_smtp_port}",
+        "ACCOUNT_2_EMAIL_USERNAME": "${user_config.account_2_email_username}",
+        "ACCOUNT_2_SSL_VERIFY": "${user_config.account_2_ssl_verify}",
+        "ACCOUNT_2_SENT_FOLDER": "${user_config.account_2_sent_folder}",
+        "ACCOUNT_3_LABEL": "${user_config.account_3_label}",
+        "ACCOUNT_3_EMAIL_ADDRESS": "${user_config.account_3_email_address}",
+        "ACCOUNT_3_EMAIL_PASSWORD": "${user_config.account_3_email_password}",
+        "ACCOUNT_3_IMAP_HOST": "${user_config.account_3_imap_host}",
+        "ACCOUNT_3_SMTP_HOST": "${user_config.account_3_smtp_host}",
+        "ACCOUNT_3_IMAP_SECURITY": "${user_config.account_3_imap_security}",
+        "ACCOUNT_3_SMTP_SECURITY": "${user_config.account_3_smtp_security}",
+        "ACCOUNT_3_IMAP_PORT": "${user_config.account_3_imap_port}",
+        "ACCOUNT_3_SMTP_PORT": "${user_config.account_3_smtp_port}",
+        "ACCOUNT_3_EMAIL_USERNAME": "${user_config.account_3_email_username}",
+        "ACCOUNT_3_SSL_VERIFY": "${user_config.account_3_ssl_verify}",
+        "ACCOUNT_3_SENT_FOLDER": "${user_config.account_3_sent_folder}"
       }
     }
   },
   "user_config": {
-    "email_address": {
+    "account_1_label": {
       "type": "string",
-      "title": "Email Address",
-      "description": "Your email address (also used as the From address and default username)",
+      "title": "Account 1 — Label",
+      "description": "Custom label for account 1 (e.g. 'personal', 'work'). Defaults to 'account1' if empty.",
+      "required": false,
+      "default": ""
+    },
+    "account_1_email_address": {
+      "type": "string",
+      "title": "Account 1 — Email Address",
+      "description": "Email address for account 1 (also used as the From address and default username)",
       "required": true
     },
-    "email_password": {
+    "account_1_email_password": {
       "type": "string",
-      "title": "Password / App Password",
-      "description": "Your email password or app-specific password. For Gmail, use an App Password from https://myaccount.google.com/apppasswords",
+      "title": "Account 1 — Password / App Password",
+      "description": "Password or app-specific password for account 1. For Gmail, use an App Password.",
       "required": true,
       "sensitive": true
     },
-    "imap_host": {
+    "account_1_imap_host": {
       "type": "string",
-      "title": "IMAP Host",
-      "description": "IMAP server hostname (e.g. imap.gmail.com, outlook.office365.com, imap.fastmail.com)",
+      "title": "Account 1 — IMAP Host",
+      "description": "IMAP server hostname (e.g. imap.gmail.com, outlook.office365.com)",
       "required": true
     },
-    "smtp_host": {
+    "account_1_smtp_host": {
       "type": "string",
-      "title": "SMTP Host",
-      "description": "SMTP server hostname (e.g. smtp.gmail.com, smtp.office365.com, smtp.fastmail.com)",
+      "title": "Account 1 — SMTP Host",
+      "description": "SMTP server hostname (e.g. smtp.gmail.com, smtp.office365.com)",
       "required": true
     },
-    "imap_security": {
+    "account_1_imap_security": {
       "type": "string",
-      "title": "IMAP Security",
+      "title": "Account 1 — IMAP Security",
       "description": "IMAP connection security: ssl (port 993), starttls (port 143), or none",
       "default": "ssl"
     },
-    "smtp_security": {
+    "account_1_smtp_security": {
       "type": "string",
-      "title": "SMTP Security",
+      "title": "Account 1 — SMTP Security",
       "description": "SMTP connection security: ssl (port 465), starttls (port 587), or none (port 25)",
       "default": "ssl"
     },
-    "imap_port": {
+    "account_1_imap_port": {
       "type": "string",
-      "title": "IMAP Port",
+      "title": "Account 1 — IMAP Port",
       "description": "Custom IMAP port (leave empty for default based on security mode)",
       "default": ""
     },
-    "smtp_port": {
+    "account_1_smtp_port": {
       "type": "string",
-      "title": "SMTP Port",
+      "title": "Account 1 — SMTP Port",
       "description": "Custom SMTP port (leave empty for default based on security mode)",
       "default": ""
     },
-    "email_username": {
+    "account_1_email_username": {
       "type": "string",
-      "title": "Username (if different from email)",
-      "description": "IMAP/SMTP login username, if different from your email address. Leave empty to use the email address.",
+      "title": "Account 1 — Username",
+      "description": "IMAP/SMTP login username if different from email address. Leave empty to use the email address.",
       "default": ""
     },
-    "ssl_verify": {
+    "account_1_ssl_verify": {
       "type": "string",
-      "title": "Verify SSL Certificates",
+      "title": "Account 1 — Verify SSL Certificates",
       "description": "Set to 'false' to skip TLS certificate verification (not recommended)",
       "default": "true"
+    },
+    "account_1_sent_folder": {
+      "type": "string",
+      "title": "Account 1 — Sent Folder",
+      "description": "Mailbox path for saving sent emails",
+      "default": "Sent"
+    },
+    "account_2_label": {
+      "type": "string",
+      "title": "Account 2 — Label",
+      "description": "Custom label for account 2 (e.g. 'pro', 'work'). Defaults to 'account2' if empty.",
+      "required": false,
+      "default": ""
+    },
+    "account_2_email_address": {
+      "type": "string",
+      "title": "Account 2 — Email Address",
+      "description": "Email address for account 2. Leave empty if not using a second account.",
+      "required": false,
+      "default": ""
+    },
+    "account_2_email_password": {
+      "type": "string",
+      "title": "Account 2 — Password / App Password",
+      "description": "Password or app-specific password for account 2",
+      "required": false,
+      "sensitive": true,
+      "default": ""
+    },
+    "account_2_imap_host": {
+      "type": "string",
+      "title": "Account 2 — IMAP Host",
+      "description": "IMAP server hostname for account 2",
+      "required": false,
+      "default": ""
+    },
+    "account_2_smtp_host": {
+      "type": "string",
+      "title": "Account 2 — SMTP Host",
+      "description": "SMTP server hostname for account 2",
+      "required": false,
+      "default": ""
+    },
+    "account_2_imap_security": {
+      "type": "string",
+      "title": "Account 2 — IMAP Security",
+      "description": "IMAP connection security for account 2: ssl, starttls, or none",
+      "required": false,
+      "default": "ssl"
+    },
+    "account_2_smtp_security": {
+      "type": "string",
+      "title": "Account 2 — SMTP Security",
+      "description": "SMTP connection security for account 2: ssl, starttls, or none",
+      "required": false,
+      "default": "ssl"
+    },
+    "account_2_imap_port": {
+      "type": "string",
+      "title": "Account 2 — IMAP Port",
+      "description": "Custom IMAP port for account 2",
+      "required": false,
+      "default": ""
+    },
+    "account_2_smtp_port": {
+      "type": "string",
+      "title": "Account 2 — SMTP Port",
+      "description": "Custom SMTP port for account 2",
+      "required": false,
+      "default": ""
+    },
+    "account_2_email_username": {
+      "type": "string",
+      "title": "Account 2 — Username",
+      "description": "IMAP/SMTP login username for account 2 if different from email address",
+      "required": false,
+      "default": ""
+    },
+    "account_2_ssl_verify": {
+      "type": "string",
+      "title": "Account 2 — Verify SSL Certificates",
+      "description": "Set to 'false' to skip TLS certificate verification for account 2",
+      "required": false,
+      "default": "true"
+    },
+    "account_2_sent_folder": {
+      "type": "string",
+      "title": "Account 2 — Sent Folder",
+      "description": "Mailbox path for saving sent emails for account 2",
+      "required": false,
+      "default": "Sent"
+    },
+    "account_3_label": {
+      "type": "string",
+      "title": "Account 3 — Label",
+      "description": "Custom label for account 3 (e.g. 'consulting', 'personal'). Defaults to 'account3' if empty.",
+      "required": false,
+      "default": ""
+    },
+    "account_3_email_address": {
+      "type": "string",
+      "title": "Account 3 — Email Address",
+      "description": "Email address for account 3. Leave empty if not using a third account.",
+      "required": false,
+      "default": ""
+    },
+    "account_3_email_password": {
+      "type": "string",
+      "title": "Account 3 — Password / App Password",
+      "description": "Password or app-specific password for account 3",
+      "required": false,
+      "sensitive": true,
+      "default": ""
+    },
+    "account_3_imap_host": {
+      "type": "string",
+      "title": "Account 3 — IMAP Host",
+      "description": "IMAP server hostname for account 3",
+      "required": false,
+      "default": ""
+    },
+    "account_3_smtp_host": {
+      "type": "string",
+      "title": "Account 3 — SMTP Host",
+      "description": "SMTP server hostname for account 3",
+      "required": false,
+      "default": ""
+    },
+    "account_3_imap_security": {
+      "type": "string",
+      "title": "Account 3 — IMAP Security",
+      "description": "IMAP connection security for account 3: ssl, starttls, or none",
+      "required": false,
+      "default": "ssl"
+    },
+    "account_3_smtp_security": {
+      "type": "string",
+      "title": "Account 3 — SMTP Security",
+      "description": "SMTP connection security for account 3: ssl, starttls, or none",
+      "required": false,
+      "default": "ssl"
+    },
+    "account_3_imap_port": {
+      "type": "string",
+      "title": "Account 3 — IMAP Port",
+      "description": "Custom IMAP port for account 3",
+      "required": false,
+      "default": ""
+    },
+    "account_3_smtp_port": {
+      "type": "string",
+      "title": "Account 3 — SMTP Port",
+      "description": "Custom SMTP port for account 3",
+      "required": false,
+      "default": ""
+    },
+    "account_3_email_username": {
+      "type": "string",
+      "title": "Account 3 — Username",
+      "description": "IMAP/SMTP login username for account 3 if different from email address",
+      "required": false,
+      "default": ""
+    },
+    "account_3_ssl_verify": {
+      "type": "string",
+      "title": "Account 3 — Verify SSL Certificates",
+      "description": "Set to 'false' to skip TLS certificate verification for account 3",
+      "required": false,
+      "default": "true"
+    },
+    "account_3_sent_folder": {
+      "type": "string",
+      "title": "Account 3 — Sent Folder",
+      "description": "Mailbox path for saving sent emails for account 3",
+      "required": false,
+      "default": "Sent"
     }
   },
   "tools": [

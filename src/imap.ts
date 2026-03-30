@@ -8,46 +8,28 @@ import type {
   MessageStructureObject,
   SearchObject,
 } from "imapflow";
+import type { AccountConfig } from "./accounts.js";
 
-type SecurityMode = "ssl" | "starttls" | "none";
-
-function getImapConfig(): ImapFlowOptions {
-  const host = process.env["IMAP_HOST"];
-  if (!host) throw new Error("IMAP_HOST is required");
-
-  const security: SecurityMode =
-    (process.env["IMAP_SECURITY"] as SecurityMode | undefined) ?? "ssl";
-  const defaultPort = security === "ssl" ? 993 : 143;
-  const port = parseInt(process.env["IMAP_PORT"] ?? String(defaultPort), 10);
-  const sslVerify = process.env["SSL_VERIFY"] !== "false";
-
-  const username =
-    process.env["EMAIL_USERNAME"] ?? process.env["EMAIL_ADDRESS"] ?? "";
-  const password = process.env["EMAIL_PASSWORD"] ?? "";
-
+/** @internal */
+export function imapConfigFromAccount(account: AccountConfig): ImapFlowOptions {
   const config: ImapFlowOptions = {
-    host,
-    port,
-    secure: security === "ssl",
+    host: account.imapHost,
+    port: account.imapPort,
+    secure: account.imapSecurity === "ssl",
     logger: false,
-    tls: {
-      rejectUnauthorized: sslVerify,
-    },
+    tls: { rejectUnauthorized: account.sslVerify },
   };
-
-  if (security === "starttls") {
+  if (account.imapSecurity === "starttls") {
     config.secure = false;
   }
-
-  if (password || security !== "none") {
-    config.auth = { user: username, pass: password };
+  if (account.password || account.imapSecurity !== "none") {
+    config.auth = { user: account.username, pass: account.password };
   }
-
   return config;
 }
 
-function createClient(): ImapFlow {
-  return new ImapFlow(getImapConfig());
+function createClient(account: AccountConfig): ImapFlow {
+  return new ImapFlow(imapConfigFromAccount(account));
 }
 
 function formatAddress(
@@ -74,21 +56,41 @@ interface MailboxInfo {
 }
 
 export async function appendToMailbox(
+  account: AccountConfig,
   mailbox: string,
   raw: Buffer,
   flags: string[] = ["\\Seen"]
 ): Promise<void> {
-  const client = createClient();
+  const client = createClient(account);
   try {
     await client.connect();
-    await client.append(mailbox, raw, flags);
+    // Pass the mailbox path as a string[] rather than a plain string.
+    //
+    // Why: IMAP servers use different hierarchy delimiters — "/" on Gmail,
+    // "." on Fastmail/Dovecot, etc. If we pass a raw string like "Sent/Work",
+    // imapflow sends it verbatim; on a "." server the folder won't be found.
+    //
+    // imapflow's internal normalizePath() (lib/tools.js) handles string[]
+    // specially: it joins the segments using the server's *actual* delimiter
+    // (discovered during the NAMESPACE handshake after connect()) and prepends
+    // the namespace prefix if required. This makes path resolution
+    // server-agnostic regardless of what separator the user typed.
+    //
+    // Source: node_modules/imapflow/lib/commands/append.js line 25
+    //   `destination = normalizePath(connection, destination)`
+    // Source: node_modules/imapflow/lib/tools.js lines 43-64
+    //   `if (Array.isArray(path)) { path = path.join(connection.namespace.delimiter) }`
+    //
+    // The TypeScript declaration (lib/imap-flow.d.ts) only exposes `string`
+    // because the array overload was never added to the types — hence the cast.
+    await client.append(mailbox.split("/") as unknown as string, raw, flags);
   } finally {
     await client.logout().catch(() => {});
   }
 }
 
-export async function listMailboxes(): Promise<MailboxInfo[]> {
-  const client = createClient();
+export async function listMailboxes(account: AccountConfig): Promise<MailboxInfo[]> {
+  const client = createClient(account);
   try {
     await client.connect();
     const list: ListResponse[] = await client.list();
@@ -132,11 +134,12 @@ interface ListEmailsResult {
 }
 
 export async function listEmails(
+  account: AccountConfig,
   mailbox: string = "INBOX",
   page: number = 1,
   pageSize: number = 20
 ): Promise<ListEmailsResult> {
-  const client = createClient();
+  const client = createClient(account);
   try {
     await client.connect();
     const mb = await client.mailboxOpen(mailbox, { readOnly: true });
@@ -248,10 +251,11 @@ interface FetchEmailResult {
 }
 
 export async function fetchEmail(
+  account: AccountConfig,
   mailbox: string = "INBOX",
   uid: number
 ): Promise<FetchEmailResult> {
-  const client = createClient();
+  const client = createClient(account);
   try {
     await client.connect();
     await client.mailboxOpen(mailbox, { readOnly: true });
@@ -338,11 +342,12 @@ interface SearchCriteria {
 }
 
 export async function searchEmails(
+  account: AccountConfig,
   mailbox: string = "INBOX",
   criteria: SearchCriteria,
   limit: number = 50
 ): Promise<EmailSummary[]> {
-  const client = createClient();
+  const client = createClient(account);
   try {
     await client.connect();
     await client.mailboxOpen(mailbox, { readOnly: true });
@@ -383,11 +388,12 @@ interface MoveEmailResult {
 }
 
 export async function moveEmail(
+  account: AccountConfig,
   mailbox: string,
   uid: number,
   destination: string
 ): Promise<MoveEmailResult> {
-  const client = createClient();
+  const client = createClient(account);
   try {
     await client.connect();
     await client.mailboxOpen(mailbox);
@@ -418,10 +424,11 @@ export async function moveEmail(
 }
 
 export async function deleteEmail(
+  account: AccountConfig,
   mailbox: string,
   uid: number
 ): Promise<{ uid: number; mailbox: string; deleted: boolean }> {
-  const client = createClient();
+  const client = createClient(account);
   try {
     await client.connect();
     await client.mailboxOpen(mailbox);
@@ -435,11 +442,12 @@ export async function deleteEmail(
 }
 
 export async function markEmail(
+  account: AccountConfig,
   mailbox: string,
   uid: number,
   read: boolean
 ): Promise<{ uid: number; mailbox: string; read: boolean }> {
-  const client = createClient();
+  const client = createClient(account);
   try {
     await client.connect();
     await client.mailboxOpen(mailbox);
